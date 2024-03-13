@@ -58,6 +58,27 @@ async function addTask(event) {
   }
 }
 
+async function updateTask(event) {
+  const updatedTask = event.target.taskObject;
+  updatedTask.done = !updatedTask.done;
+
+  try {
+    const response = await fetch(
+      "http://localhost:4730/todos/" + updatedTask.id,
+      {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(updatedTask),
+      }
+    );
+    if (response.ok) {
+      renderTasks();
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 function renderTasks() {
   list.innerText = "";
   for (task of tasks) {
@@ -78,3 +99,4 @@ function renderTasks() {
 loadTasks();
 
 btnAdd.addEventListener("click", addTask);
+list.addEventListener("change", updateTask);
