@@ -22,11 +22,21 @@ async function loadTasks() {
 }
 
 async function addTask(event) {
+  event.preventDefault();
+
+  if (
+    tasks.some(function (task) {
+      return task.description.toLowerCase() === input.value.toLowerCase();
+    })
+  ) {
+    alert("That is already on your list!");
+    return;
+  }
+
   const postTask = {
     description: input.value,
     done: false,
   };
-  event.preventDefault();
 
   try {
     const response = await fetch("http://localhost:4730/todos/", {
