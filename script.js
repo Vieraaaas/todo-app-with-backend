@@ -72,7 +72,6 @@ async function updateTask(event) {
       }
     );
     if (response.ok) {
-      renderTasks();
     }
   } catch (err) {
     console.error(err);
@@ -96,7 +95,32 @@ function renderTasks() {
   }
 }
 
+function filter(status) {
+  for (task of tasks) {
+    const listElement = document.querySelector(`#task${task.id}`);
+    if (task.done === status) {
+      listElement.parentNode.style.display = "none";
+    } else {
+      listElement.parentNode.style.display = "";
+    }
+  }
+}
+
+function showAll() {
+  for (task of tasks) {
+    const listElement = document.querySelector(`#task${task.id}`);
+    listElement.parentNode.style.display = "";
+  }
+}
+
 loadTasks();
 
 btnAdd.addEventListener("click", addTask);
 list.addEventListener("change", updateTask);
+radioAll.addEventListener("click", showAll);
+radioOpen.addEventListener("click", function () {
+  filter(true);
+});
+radioDone.addEventListener("click", function () {
+  filter(false);
+});
