@@ -33,26 +33,28 @@ async function addTask(event) {
     return;
   }
 
-  const postTask = {
-    description: input.value,
-    done: false,
-  };
+  if (input.value.trim() !== "") {
+    const postTask = {
+      description: input.value,
+      done: false,
+    };
 
-  try {
-    const response = await fetch("http://localhost:4730/todos/", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(postTask),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      tasks.push(data);
-      renderTasks();
+    try {
+      const response = await fetch("http://localhost:4730/todos/", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(postTask),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        tasks.push(data);
+        renderTasks();
+      }
+    } catch (err) {
+      console.error(err);
     }
-  } catch (err) {
-    console.error(err);
   }
 }
 
@@ -66,7 +68,6 @@ function renderTasks() {
     checkbox.id = "task" + task.id;
     checkbox.checked = task.done;
     checkbox.taskObject = task;
-    console.log(checkbox);
     label.htmlFor = checkbox.id;
     label.innerText = task.description;
     newItem.append(checkbox, label);
