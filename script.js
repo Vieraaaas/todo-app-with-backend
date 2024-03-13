@@ -21,7 +21,33 @@ async function loadTasks() {
   }
 }
 
+async function addTask(event) {
+  const postTask = {
+    description: input.value,
+    done: false,
+  };
+  event.preventDefault();
+
+  try {
+    const response = await fetch("http://localhost:4730/todos/", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(postTask),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      tasks.push(data);
+      renderTasks();
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 function renderTasks() {
+  list.innerText = "";
   for (task of tasks) {
     const newItem = document.createElement("li");
     const label = document.createElement("label");
@@ -39,3 +65,5 @@ function renderTasks() {
 }
 
 loadTasks();
+
+btnAdd.addEventListener("click", addTask);
