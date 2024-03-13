@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Post-It</title>
+  <link rel="stylesheet" href="https://unpkg.com/modern-normalize@2.0.0/modern-normalize.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main>
+    <h1><span class="cyber-font">Cyber </span>Post-It</h1>
+    <form>
+      <section class="options">
+        <section class="option-all">
+          <input type="radio" name="radio-select" id="radio-all">
+          <label for="radio-all">All tasks</label>
+        </section>
+        <section class="option-open">
+          <input type="radio" name="radio-select" id="radio-open">
+          <label for="radio-open">Open tasks</label>
+        </section>
+        <section class="option-done">
+          <input type="radio" name="radio-select" id="radio-done">
+          <label for="radio-done">Finished tasks</label>
+          <button class="btn-remove">Remove finished tasks</button>
+        </section>
+      </section>
+      <section class="text-input">
+        <input class="input" type="text" placeholder="Tasks go here...">
+        <button class="btn-add">Add</button>
+      </section>
+    </form>
+    <ul>
+
+    </ul>
+  </main>
+
+
+  <script src="script.js"></script>
+</body>
+
+</html>
