@@ -111,7 +111,7 @@ async function removeTasks(event) {
 
 function renderTasks() {
   list.innerText = "";
-  for (task of tasks) {
+  for (const task of tasks) {
     const newItem = document.createElement("li");
     const label = document.createElement("label");
     const checkbox = document.createElement("input");
@@ -127,7 +127,7 @@ function renderTasks() {
 }
 
 function filter(status) {
-  for (task of tasks) {
+  for (const task of tasks) {
     const listElement = document.querySelector(`#task${task.id}`);
     if (task.done === status) {
       listElement.parentNode.style.display = "none";
@@ -138,7 +138,7 @@ function filter(status) {
 }
 
 function showAll() {
-  for (task of tasks) {
+  for (const task of tasks) {
     const listElement = document.querySelector(`#task${task.id}`);
     listElement.parentNode.style.display = "";
   }
