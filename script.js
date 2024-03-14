@@ -52,6 +52,7 @@ async function addTask(event) {
         tasks.push(data);
         renderTasks();
       }
+      input.value = "";
     } catch (err) {
       console.error(err);
     }
