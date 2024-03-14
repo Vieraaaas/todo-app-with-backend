@@ -78,6 +78,36 @@ async function updateTask(event) {
   }
 }
 
+async function removeTasks(event) {
+  event.preventDefault();
+
+  if (
+    confirm(
+      "Are you sure you want to delete ALL finished tasks? No takesies-backsies!"
+    ) === true
+  ) {
+    try {
+      for (let i = tasks.length - 1; i >= 0; i--) {
+        let task = tasks[i];
+        if (task.done === true) {
+          const response = await fetch(
+            "http://localhost:4730/todos/" + task.id,
+            {
+              method: "DELETE",
+            }
+          );
+          if (response.ok) {
+            tasks.splice(i, 1);
+          }
+        }
+      }
+      renderTasks();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+}
+
 function renderTasks() {
   list.innerText = "";
   for (task of tasks) {
@@ -124,3 +154,4 @@ radioOpen.addEventListener("click", function () {
 radioDone.addEventListener("click", function () {
   filter(false);
 });
+btnRemove.addEventListener("click", removeTasks);
