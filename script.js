@@ -6,108 +6,9 @@ const radioOpen = document.querySelector("#radio-open");
 const radioDone = document.querySelector("#radio-done");
 const radioAll = document.querySelector("#radio-all");
 const btnRemove = document.querySelector(".btn-remove");
+const apiUrl = "http://localhost:4730/todos/";
 
-async function loadTasks() {
-  try {
-    const response = await fetch("http://localhost:4730/todos/");
-
-    if (response.ok) {
-      const data = await response.json();
-      tasks = data;
-      renderTasks();
-    }
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-async function addTask(event) {
-  event.preventDefault();
-
-  if (
-    tasks.some(function (task) {
-      return task.description.toLowerCase() === input.value.toLowerCase();
-    })
-  ) {
-    alert("That is already on your list!");
-    return;
-  }
-
-  if (input.value.trim() !== "") {
-    const postTask = {
-      description: input.value,
-      done: false,
-    };
-
-    try {
-      const response = await fetch("http://localhost:4730/todos/", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(postTask),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        tasks.push(data);
-        renderTasks();
-      }
-      input.value = "";
-    } catch (err) {
-      console.error(err);
-    }
-  }
-}
-
-async function updateTask(event) {
-  const updatedTask = event.target.taskObject;
-  updatedTask.done = !updatedTask.done;
-
-  try {
-    const response = await fetch(
-      "http://localhost:4730/todos/" + updatedTask.id,
-      {
-        method: "PUT",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(updatedTask),
-      }
-    );
-    if (response.ok) {
-    }
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-async function removeTasks(event) {
-  event.preventDefault();
-
-  if (
-    confirm(
-      "Are you sure you want to delete ALL finished tasks? No takesies-backsies!"
-    ) === true
-  ) {
-    try {
-      for (let i = tasks.length - 1; i >= 0; i--) {
-        let task = tasks[i];
-        if (task.done === true) {
-          const response = await fetch(
-            "http://localhost:4730/todos/" + task.id,
-            {
-              method: "DELETE",
-            }
-          );
-          if (response.ok) {
-            tasks.splice(i, 1);
-          }
-        }
-      }
-      renderTasks();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-}
+loadTasks();
 
 function renderTasks() {
   list.innerText = "";
@@ -126,6 +27,114 @@ function renderTasks() {
   }
 }
 
+async function loadTasks() {
+  try {
+    const response = await fetch(apiUrl);
+
+    if (response.ok) {
+      const data = await response.json();
+      tasks = data;
+      renderTasks();
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// Add task
+btnAdd.addEventListener("click", async function (event) {
+  event.preventDefault();
+
+  if (
+    tasks.some(function (task) {
+      return task.description.toLowerCase() === input.value.toLowerCase();
+    })
+  ) {
+    alert("That is already on your list!");
+    return;
+  }
+
+  if (input.value.trim() !== "") {
+    const postTask = {
+      description: input.value,
+      done: false,
+    };
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(postTask),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        tasks.push(data);
+        renderTasks();
+      }
+      input.value = "";
+    } catch (err) {
+      console.error(err);
+    }
+  }
+});
+
+// Toggle done = true/false
+list.addEventListener("change", async function (event) {
+  const updatedTask = event.target.taskObject;
+  updatedTask.done = !updatedTask.done;
+
+  try {
+    const response = await fetch(apiUrl + updatedTask.id, {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(updatedTask),
+    });
+    if (response.ok) {
+    }
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+// Remove finished tasks
+btnRemove.addEventListener("click", async function (event) {
+  event.preventDefault();
+
+  if (
+    confirm(
+      "Are you sure you want to delete ALL finished tasks? No takesies-backsies!"
+    ) === true
+  ) {
+    try {
+      for (let i = tasks.length - 1; i >= 0; i--) {
+        let task = tasks[i];
+        if (task.done === true) {
+          const response = await fetch(apiUrl + task.id, {
+            method: "DELETE",
+          });
+          if (response.ok) {
+            tasks.splice(i, 1);
+          }
+        }
+      }
+      renderTasks();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+});
+
+// Show all tasks
+radioAll.addEventListener("click", function showAll() {
+  for (const task of tasks) {
+    const listElement = document.querySelector(`#task${task.id}`);
+    listElement.parentNode.style.display = "";
+  }
+});
+
+//filter tasks
 function filter(status) {
   for (const task of tasks) {
     const listElement = document.querySelector(`#task${task.id}`);
@@ -136,23 +145,9 @@ function filter(status) {
     }
   }
 }
-
-function showAll() {
-  for (const task of tasks) {
-    const listElement = document.querySelector(`#task${task.id}`);
-    listElement.parentNode.style.display = "";
-  }
-}
-
-loadTasks();
-
-btnAdd.addEventListener("click", addTask);
-list.addEventListener("change", updateTask);
-radioAll.addEventListener("click", showAll);
 radioOpen.addEventListener("click", function () {
   filter(true);
 });
 radioDone.addEventListener("click", function () {
   filter(false);
 });
-btnRemove.addEventListener("click", removeTasks);
