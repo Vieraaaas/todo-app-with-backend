@@ -12,7 +12,7 @@
   font-family: "Permanent Marker";
   font-style: normal;
   font-weight: 400;
-  src: url("./fonts/permanent-marker-v16-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/permanent-marker-v16-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 /* patrick-hand-regular - latin */
 @font-face {
@@ -20,7 +20,7 @@
   font-family: "Patrick Hand";
   font-style: normal;
   font-weight: 400;
-  src: url("./fonts/patrick-hand-v23-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/patrick-hand-v23-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 
 :root {
