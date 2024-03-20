@@ -39,4 +39,13 @@ describe("Todo App", () => {
     cy.contains(`${task1}`).should("not.be.hidden");
     cy.contains(`${task2}`).should("not.be.hidden");
   });
+
+  it("delets done tasks", () => {
+    cy.get("[data-cy=btn-remove]").click();
+    cy.contains(`${task1}`).should("not.exist");
+    cy.contains(`${task2}`).should("exist");
+    cy.contains(`${task2}`).parent().find("input[type=checkbox]").check();
+    cy.get("[data-cy=btn-remove]").click();
+    cy.contains(`${task2}`).should("not.exist");
+  });
 });
