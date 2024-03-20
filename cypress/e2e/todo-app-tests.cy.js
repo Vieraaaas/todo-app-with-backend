@@ -21,6 +21,19 @@ describe("Todo App", () => {
     cy.get("[data-cy=list]").children().last().should("have.text", task2);
   });
 
+  it("rejects duplicates", () => {
+    cy.get("[data-cy=input]").type(`${task1}{enter}`);
+    cy.get("[data-cy=list]")
+      .children()
+      .contains(task1)
+      .should("have.length", 1);
+    cy.get("[data-cy=input]").clear().type(`${task2}{enter}`);
+    cy.get("[data-cy=list]")
+      .children()
+      .contains(task2)
+      .should("have.length", 1);
+  });
+
   it("filters finished tasks", () => {
     cy.contains(`${task1}`).parent().find("input[type=checkbox]").check();
     cy.get("[data-cy=radio-done").click();
